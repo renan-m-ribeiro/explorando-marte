@@ -24,10 +24,22 @@ const robot2 = {
     travel: []
 }
 
+function changeDirection(command, robot) {
+
+    if(command === 'L' || command === 'R') {
+        const directionValue = command === 'L' ? -1 : 1
+        robot.position.direction = directions[(directions.indexOf(robot.position.direction) + directionValue) % directions.length]
+        console.log(robot.position.direction)
+        return robot.position.direction
+    } else {
+        return console.log('Invalid command.')
+    } 
+}
+
 const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
-  })
+})
 
 const question1 = () => {
     return new Promise((resolve, reject) => {
