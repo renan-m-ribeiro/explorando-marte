@@ -36,6 +36,40 @@ function changeDirection(command, robot) {
     } 
 }
 
+function move(command,robot) {
+    const { position } = robot
+    if(command === 'M') {
+        robot.position = updatePosition(position)
+        console.log(`[${robot.position.X}][${robot.position.Y}]-[${robot.position.direction}] --> move`)
+        return position
+    } else {
+        return console.log('Invalid command.')
+    }
+
+    
+}
+
+function updatePosition(position) {
+    const { direction } = position 
+    let newPosition = {...position}
+
+    if (direction === 'N') {
+        newPosition.Y++
+    } else if (direction === 'S') {
+        newPosition.Y--
+    } else if (direction === 'E') {
+        newPosition.X++
+    } else if (direction === 'W') {
+        newPosition.X--
+    }
+
+    if (newPosition.X < 0 || newPosition.X > place.X || newPosition.Y < 0 || newPosition.Y > place.Y) {
+        return position
+    } else {
+        return newPosition
+    }
+}
+
 const rl = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
