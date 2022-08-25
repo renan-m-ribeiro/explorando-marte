@@ -1,9 +1,12 @@
 {
   "scripts": {
-    "cypress:open": "cypress open"
+    "start": "node index.js",
+    "test": "jest index.test.js"
   },
   "dependencies": {
-    "cypress": "^10.6.0",
     "node": "^16.17.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
   }
 }
