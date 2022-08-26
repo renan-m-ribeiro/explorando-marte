@@ -1,10 +1,11 @@
-const updatePosition = require('./updatePosition.js')
+const { updatePosition, updatePhoto } = require('./updatePosition.js')
 const { directions } = require('./constants.js')
 
 class Robot {
-    constructor(position, travel) {
-        this.position = position
-        this.travel = travel
+    constructor(X, Y, direction) {
+        this.position = { X, Y, direction }
+        this.travel = []
+        this.photo = []
     }
 
     filterCommands() {
@@ -14,7 +15,7 @@ class Robot {
             } else if (command === 'M') {
                 return this.move(command)
             } else if (command === 'P') {
-                return this.place(command)
+                return this.takePhoto(command)
             } else {
                 return console.log('Invalid command.')
             }
@@ -25,15 +26,21 @@ class Robot {
         const directionValue = command === 'L' ? -1 : 1
         const sumDirection = directions.indexOf(this.position.direction) + directionValue
         this.position.direction = directions.at(sumDirection % directions.length)
-        console.log(`[${this.position.X}][${this.position.Y}]-[${this.position.direction}] --> direction`)
+        //console.log(`[${this.position.X}][${this.position.Y}]-[${this.position.direction}] --> direction`)
         return this.position
     }
 
     move() {
         const { position } = this
         this.position = updatePosition(position)
-        console.log(`[${this.position.X}][${this.position.Y}]-[${this.position.direction}] --> move`)
+        //console.log(`[${this.position.X}][${this.position.Y}]-[${this.position.direction}] --> move`)
         return this.position
+    }
+
+    takePhoto() {
+        const { position } = this
+        this.photo = [...this.photo, updatePhoto(position)]
+        return this.photo
     }
 }
 

@@ -21,4 +21,20 @@ function updatePosition(position) {
     }
 }
 
-module.exports = updatePosition
+function updatePhoto(position) {
+    const { direction } = position
+    let newPhoto = {...position}
+
+    if (direction === 'N') {
+        newPhoto.Y++
+    } else if (direction === 'S') {
+        newPhoto.Y--
+    } else if (direction === 'E') {
+        newPhoto.X++
+    } else if (direction === 'W') {
+        newPhoto.X--
+    }
+    return newPhoto
+}
+
+module.exports = { updatePosition, updatePhoto }
