@@ -1,8 +1,9 @@
+
 const { move, changeDirection, filterCommands } = require("./index.js");
 const Robot = require("./Robot.js");
 
 test('go to 13N', () => {
-    const robot1 = new Robot({ X: 1, Y: 2, direction: 'N'}, [])
+    const robot1 = new Robot(1, 2, 'N')
 
     const commands = ['L', 'M', 'L', 'M', 'L', 'M', 'L', 'M', 'M']
     robot1.travel = commands
@@ -21,28 +22,23 @@ test('go to 13N', () => {
 })
 
 
-/*test('go to 51E', () => {
-    const robot2 = {
-        position: {
-            X: 3,
-            Y: 3,
-            direction: 'E',
-        },
-    }
+test('go to 51E', () => {
+    const robot1 = new Robot(3, 3, 'E')
 
-    move('M', robot2)
-    move('M', robot2)
-    changeDirection('R', robot2)
-    move('M', robot2)
-    move('M', robot2)
-    changeDirection('R', robot2)
-    move('M', robot2)
-    changeDirection('R', robot2)
-    changeDirection('R', robot2)
-    move('M', robot2)
-
-    expect(robot2.position.X).toBe(5)
-    expect(robot2.position.Y).toBe(1)
-    expect(robot2.position.direction).toBe('E')
+    const commands = ['M', 'M', 'R', 'M', 'M', 'R', 'M', 'R', 'R', 'M']
+    robot1.travel = commands
+    robot1.filterCommands()
+    
+    expect(robot1.position.X).toBe(5)
+    expect(robot1.position.Y).toBe(1)
+    expect(robot1.position.direction).toBe('E')
 })
-*/
+
+test('take photo', () => {
+    const robot1 = new Robot(1, 2, 'N')
+
+    const commands = ['M', 'M', 'M', 'P', 'L', 'M', 'M', 'L', 'P', 'P', 'M', 'M', 'R', 'P', 'M', 'M']
+    robot1.travel = commands
+    robot1.filterCommands()
+    console.log(robot1.photo)
+})
