@@ -1,4 +1,4 @@
-const { updatePosition, updatePhoto } = require('./updatePosition.js')
+const { updatePosition, updatePhoto } = require('./updateFunctions.js')
 const { directions } = require('./constants.js')
 
 class Robot {
@@ -8,12 +8,12 @@ class Robot {
     this.photo = []
   }
 
-  filterCommands () {
+  filterCommands (place) {
     this.travel.forEach(command => {
       if (command === 'L' || command === 'R') {
         return this.changeDirection(command)
       } else if (command === 'M') {
-        return this.move(command)
+        return this.move(command, place)
       } else if (command === 'P') {
         return this.takePhoto(command)
       } else {
@@ -32,7 +32,7 @@ class Robot {
 
   move () {
     const { position } = this
-    this.position = updatePosition(position)
+    this.position = updatePosition(position, place)
     // console.log(`[${this.position.X}][${this.position.Y}]-[${this.position.direction}] --> move`)
     return this.position
   }

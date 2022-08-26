@@ -1,16 +1,8 @@
 const Robot = require('./Robot.js')
 
-const place = {
-  X: 5,
-  Y: 5
-}
-
-const robots = []
-
+let place = { X: 0, Y: 0 }
+let robots = []
 let indexRobot = 0
-
-// const robot1 = new Robot(1, 2, 'N')
-// const robot2 = new Robot(0, 0, 'E')
 
 const rl = require('readline').createInterface({
   input: process.stdin,
@@ -49,7 +41,7 @@ const question3 = () => {
   return new Promise((resolve, reject) => {
     rl.question('', (data) => {
       robots[indexRobot].travel = [...robots[indexRobot].travel, ...data.toUpperCase()]
-      robots[indexRobot].filterCommands()
+      robots[indexRobot].filterCommands(place)
       indexRobot++
       question2()
       resolve()

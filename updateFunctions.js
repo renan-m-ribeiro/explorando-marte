@@ -1,6 +1,4 @@
-const { place } = require('./constants.js')
-
-function updatePosition (position) {
+function updatePosition (position, place) {
   const { direction } = position
   const newPosition = { ...position }
 
