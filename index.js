@@ -1,59 +1,92 @@
+const readline = require('readline')
+const { directions, commands } = require('./constants.js')
 const Robot = require('./Robot.js')
 
-let place = { X: 0, Y: 0 }
-let robots = []
-let indexRobot = 0
+let input = []
 
-const rl = require('readline').createInterface({
+const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
-const question1 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('', (data) => {
-      const positions = data.toString().split(/[\s\n]/, 2).map(parseInt)
-      place.X = positions[0]
-      place.Y = positions[1]
-      resolve()
-    })
-  })
-}
+console.log('Entrada de comandos:\n')
+rl.prompt()
 
-const question2 = () => {
+rl.on('line', function (command) {
+  if (command === '') {
+    rl.close()
+  }
+  input.push(command);
+})
+
+rl.on('close', async function () {
+  try {
+    const output = await validateInput()
+    console.log(output)
+    process.exit(0);
+  } catch(err) {
+    console.log(err)
+    process.exit(0);
+  }
+})
+
+function validateInput() {
   return new Promise((resolve, reject) => {
-    rl.question('', (data) => {
-      const positions = data.toString().split(/[\s\n]/, 3)
-      if (Number.isInteger(parseInt(positions[0]))) {
-        robots[indexRobot] = new Robot(parseInt(positions[0]), parseInt(positions[1]), positions[2].toUpperCase())
-        question3()
-      } else {
-        console.log(robots.map(robot =>
-                `${robot.position.X} ${robot.position.Y} ${robot.position.direction}`).join('\n'))
-        rl.close()
+    if (input.length < 3) {
+      reject('Comandos insuficientes.')
+    }
+
+    if (input.length % 2 === 0) {
+      reject('As sondas estão com dados incompletos.')
+    }
+
+    let gridSize = input[0].match(/[\d]+/g)
+    if (gridSize.length !== 2 || !Number.isInteger(parseInt(gridSize[0])) || !Number.isInteger(parseInt(gridSize[1]))) {
+      reject('Tamanho da malha inválido.')
+    }
+    gridSize = { X: parseInt(gridSize[0]), Y: parseInt(gridSize[1]) }
+
+    let robots = []
+    for (let index = 1; index < input.length; index++) {
+      const element = input[index]
+      const robotIndex = Math.floor((index / 2) - 0.5)
+
+      if (index % 2 === 1) {
+        const coords = element.match(/[\d]+/g)
+        if (coords.length !== 2 || !Number.isInteger(parseInt(coords[0])) || !Number.isInteger(parseInt(coords[1]))) {
+          reject('Coordenadas inválidas.')
+        }
+
+        if (coords[0] > gridSize.X || coords[1] > gridSize.Y) {
+          reject('Coordenadas inválidas.')
+        }
+
+        const direction = element.match(/[A-Z]/)[0]
+        if (!directions.includes(direction)) {
+          reject('Direção inválida.')
+        }
+
+        robots[robotIndex] = new Robot(parseInt(coords[0]), parseInt(coords[1]), direction)
+        continue
       }
-      resolve()
-    })
+
+      const inputCommands = element.split('')
+      if (index % 2 === 0 && inputCommands.every(char => commands.includes(char.toUpperCase()))) {
+        const robotIndex = Math.floor((index / 2) - 0.5)
+        robots[robotIndex].commands = [...robots[robotIndex].commands, ...element.toUpperCase()]
+        robots[robotIndex].doCommands(gridSize)
+        continue
+      } else {
+        reject('Comando inválido.')
+        continue
+      }
+    }
+
+    const output = robots.map(robot => {
+      const { X, Y, direction } = robot.position
+      return `${X} ${Y} ${direction}`
+    }).join('\n')
+    
+    resolve(output)
   })
 }
-
-const question3 = () => {
-  return new Promise((resolve, reject) => {
-    rl.question('', (data) => {
-      robots[indexRobot].travel = [...robots[indexRobot].travel, ...data.toUpperCase()]
-      robots[indexRobot].filterCommands(place)
-      indexRobot++
-      question2()
-      resolve()
-    })
-  })
-}
-
-const main = async () => {
-  await question1()
-  await question2()
-  await question3()
-  rl.close()
-}
-
-main()

@@ -1,4 +1,4 @@
-function updatePosition (position, place) {
+function updatePosition (position, gridSize) {
   const { direction } = position
   const newPosition = { ...position }
 
@@ -12,7 +12,7 @@ function updatePosition (position, place) {
     newPosition.X--
   }
 
-  if (newPosition.X < 0 || newPosition.X > place.X || newPosition.Y < 0 || newPosition.Y > place.Y) {
+  if (newPosition.X < 0 || newPosition.X > gridSize.X || newPosition.Y < 0 || newPosition.Y > gridSize.Y) {
     return position
   } else {
     return newPosition
@@ -32,6 +32,7 @@ function updatePhoto (position) {
   } else if (direction === 'W') {
     newPhoto.X--
   }
+
   return newPhoto
 }
 
