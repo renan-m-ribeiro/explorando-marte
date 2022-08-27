@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node index.js",
-    "test": "jest index.test.js",
+    "test": "jest .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
