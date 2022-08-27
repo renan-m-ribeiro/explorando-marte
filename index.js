@@ -1,6 +1,6 @@
 const readline = require('readline')
-const { directions, commands } = require('./constants.js')
-const Robot = require('./Robot.js')
+const { directions, commands } = require('./src/constants.js')
+const Robot = require('./src/Robot.js')
 
 const input = []
 
